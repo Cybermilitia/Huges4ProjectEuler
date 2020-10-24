@@ -43,4 +43,6 @@ class number {
 	}numb;
 };
 
+void test(void);
+
 #endif
