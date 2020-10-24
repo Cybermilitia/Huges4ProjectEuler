@@ -11,11 +11,7 @@
 
 using namespace std;
 
-/*Extern keywordü olmadan her include edilen yerde tekrar tanımlanmış oluyor.*/
 //extern vector <int> modul;
-
-//int greaterf (vector<int> *, vector<int> * );
-
 
 class number {
 	public:
@@ -38,6 +34,7 @@ class number {
 	int operator != (const number&);
 	number & operator + (const number&);
 	number & operator - (const number&);
+	number & operator * (const number&);
 	
 	private:
 	struct _numb{
