@@ -666,25 +666,34 @@ number & number::operator + (const number& n){
 	
 	second.numb.sign = n.numb.sign;	
 	
-	if((first.numb.sign) == '+' && (second.numb.sign == '-')){
+	if((first.numb.sign == '+') && (second.numb.sign == '-')){
 		number &result = (first - (-second));
 		delete &first;
 		delete &second;
 		return result;
 	}
-	if((first.numb.sign) == '-' && (second.numb.sign == '+')){
+	if((first.numb.sign == '-') && (second.numb.sign == '+')){
 		number &result = (second - -first);
 		delete &first;
 		delete &second;
 		return result;
 	}
-	if((first.numb.sign) == '-' && (second.numb.sign == '-')){
+	if((first.numb.sign == '-') && (second.numb.sign == '-')){
 		number &result = -(-first + -second);
 		delete &first;
 		delete &second;
 		return result;
 	}
-
+	if(first.numb.sign == ' '){
+		number &result = second;
+		delete &first;
+		return result;
+	}
+	if(second.numb.sign == ' '){
+		number &result = first;
+		delete &second;
+		return result;
+	}
 	long unsigned int size=0;
 	int sum=0, elde = 0, cell=0;
 	vector<int> & toplam = *new vector<int>;
