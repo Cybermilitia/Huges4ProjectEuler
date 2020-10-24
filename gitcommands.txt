@@ -1,0 +1,18 @@
+git clone https://github.com/Cybermilitia/Huges4ProjectEuler.git
+
+cd Huges4ProjectEuler/
+
+git branch
+git checkout -b <branchname>
+
+make clean
+make all
+git add <filename>
+
+git branch
+git commit -m "Yorum"
+git checkout main
+git branch
+git merge <branchname>
+git push -u origin <branchname>
+
