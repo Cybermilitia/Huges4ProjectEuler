@@ -20,9 +20,9 @@ $(BIN)/$(EXECUTABLE): $(SRC)/*.cpp
 	@echo "Building..."
 	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -l$(LIBSTD)  $^ -o $@ $(LIBRARIES)
 	@echo
-	@find ./bin/ -type f | xargs ls -lart
+	@find ./bin/ -type f | xargs ls -lrt
 
 clean:
 	@echo "Clearing..."
-	@-rm $(BIN)/*
+	@-rm $(BIN)/$(EXECUTABLE)
 
