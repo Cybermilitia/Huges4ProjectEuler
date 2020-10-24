@@ -892,3 +892,168 @@ number & number::operator - (const number& n){
 	return toplamnumber;
 	
 }
+
+/* a*b overloading*/
+number & number::operator * (const number& n){
+
+	number &carpim = *new number();
+	carpim.numb.numv.clear();
+
+	number & first = *new number();
+	first.numb.numv.clear();
+	
+	for(auto it:this->numb.numv)
+		first.numb.numv.push_back(it);
+	
+	first.numb.sign = this->numb.sign;
+	
+	number & second = *new number();
+	second.numb.numv.clear();
+	
+	for(auto it:n.numb.numv)
+		second.numb.numv.push_back(it);
+	
+	second.numb.sign = n.numb.sign;	
+
+	/*İsaretleri koyalim*/
+	if((first.numb.sign == '+') && (second.numb.sign == '-')){
+		-second;
+		carpim.numb.sign = '-';
+	}
+	else if((first.numb.sign == '-') && (second.numb.sign == '+')){
+		-first;
+		carpim.numb.sign = '-';
+	}
+	else if((first.numb.sign == ' ') || (second.numb.sign == ' ')){
+		carpim.numb.sign = ' ';
+		carpim.numb.numv.clear();
+		carpim.numb.numv.push_back(0);
+		delete &first;
+		delete &second;
+		return carpim;
+	}
+
+	
+	vector <int> result{};
+	
+	/*sumresult->bir şey olarak kullanabilmek için heapten alıyorum.*/
+	vector <int> & sumresult = * new vector<int>;
+			
+	/*Most critical point is here.*/
+	vector <vector <int>> results;
+	
+	int cell=0, remain=0, last=0;
+	int j=0, sum=0, sumcell = 0, sumremain = 0;
+	
+	reverse(first.numb.numv.begin(),first.numb.numv.end());
+	reverse(second.numb.numv.begin(),second.numb.numv.end());
+			
+	//cout << "Multiplication" << endl;
+	/*Çarpımlar yapılır ve ham sonuçları iki boyutlu bir matrise yazılır. 
+	Yazılırken çarpımda ortaya çıkabilecek ikinci basamak bir sonraki çarpıma eklenir.
+	1203x456 = ((6.3-elde var,6.0,6.2-elde var,6.1),(5.3-elde var,5.0,5.2-elde var,5.1),(4.3-elde var,4.0,4.2,4.1))
+	                     1203
+						  456
+						x
+						------
+						 7218
+                        60150
+                       481200
+                      +-------
+                       548568					  
+	*/
+	int count=0;
+	int zero=0;
+	for(auto it1: first.numb.numv){
+		/*İkincisinden itibaren her bir adımda bir sıfır eklenir.
+		Böylece her çarpımdan sonra bir sola kayma sağlanır*/
+		/*Sola kaydırma bloğu - Başladı.*/	
+		for(int check=zero;check >0;check --)
+		{
+			result.push_back(0);
+		}
+			zero++;
+		/*Sola kaydırma bloğu - Bitti.*/	
+		for(auto it2: second.numb.numv){
+			count ++;
+			cell = it1*it2 + remain;
+			last = cell%10;
+			result.push_back(last);
+			remain = (cell - last)/10;	
+			//cout << "it1: " << it1 << " it2: " << it2 << " rmain: " << remain << " cell: " << cell << " last: " << last << endl;
+		}	
+
+		if(remain != 0)
+			result.push_back(remain);
+		
+		remain = 0;
+
+		/*Most critical point is here.*/
+		results.push_back(vector<int>{});
+
+		for(auto it: result){
+			results[j].push_back(it);
+		}
+		result.clear();
+		j++;
+	}
+		//cout << "Düzeltme" << endl;
+	
+	/*Gelenleri değiştirmemeliyiz.*/
+	reverse(first.numb.numv.begin(),first.numb.numv.end());
+	reverse(second.numb.numv.begin(),second.numb.numv.end());
+	
+	/*İki boyutlu matrisin tüm matrisleri toplama düzgün yapılsın diye aynı boyuta getirilir.*/
+	int mer=0;
+	for(auto it4: results){
+		
+		for(long unsigned int a=0; a < results.back().size()-it4.size(); a++)
+		{
+			results[mer].push_back(0);
+		}
+		mer ++;
+	}
+	
+		mer=0;
+
+/*	for(auto it4: results){
+		for(long unsigned int a=0; a < it4.size(); a++)
+		{
+			cout << results[mer].at(a);
+		}
+		cout << endl;
+		mer ++;
+	}*/
+//	cout << "Vektörler duzeltildi" << endl;
+	/*Her bir vektörün aynı indisli elemanını toplayıp, digite yerleştirip, artanı bir sonraki haneyle toplama*/
+	for(long unsigned int g =0; g < results[0].size(); g++){
+		
+		for(long unsigned int f=0; f < results.size(); f++)	{
+			sum = sum + results[f][g] + sumremain;
+			sumremain = 0;
+		}
+
+		sumcell = sum%10;
+//		cout << "Toplam: " << sum << endl;
+
+		sumresult.push_back(sumcell);
+		sumremain = (sum - sumcell)/10;
+		sum = 0;
+	}
+//		cout << "Multiplication 3" << endl;
+
+	if(sumremain != 0)
+		sumresult.push_back(sumremain);
+
+	
+	reverse(sumresult.begin(), sumresult.end());
+	
+	for(auto it: sumresult)
+	carpim.numb.numv.push_back(it);
+	
+	
+	delete &first;
+	delete &second;
+	delete &sumresult;
+	return carpim;
+}
